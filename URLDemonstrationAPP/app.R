@@ -41,7 +41,7 @@ server <- function(input, output) {
   output$plot <- renderPlot({
     read_csv(paste0(input$url)) %>% 
       count(familyId, sort = TRUE) %>% 
-      top_n(20) %>% 
+      slice_max(n, n = 20) %>% 
       ggplot(aes(x = familyId, y = n))+ 
       geom_col(fill = "#0B775E") +
       coord_flip() +
