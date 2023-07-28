@@ -42,6 +42,7 @@ server <- function(input, output) {
     read_csv(paste0(input$url)) %>% 
       count(familyId, sort = TRUE) %>% 
       slice_max(n, n = 20) %>% 
+      mutate(familyId = reorder(familyId, n)) %>% 
       ggplot(aes(x = familyId, y = n))+ 
       geom_col(fill = "#0B775E") +
       coord_flip() +
