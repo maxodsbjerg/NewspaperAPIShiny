@@ -45,7 +45,7 @@ server <- function(input, output) {
       ggplot(aes(x = familyId, y = n))+ 
       geom_col(fill = "#0B775E") +
       coord_flip() +
-      labs(title = paste0('Amount of articles mentioning \'revolution\''), 
+      labs(title = paste0('Amount of articles mentioning search term'), 
            subtitle = "dispersed on familyId from 1840 to 1880",
            x = "familyId")
   }, res = 96) 
