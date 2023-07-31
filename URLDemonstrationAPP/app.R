@@ -14,8 +14,9 @@ ui <- navbarPage(
              sidebarLayout(
                sidebarPanel( 
                  textInput("url", 
-                           p("Url:"), 
-                           value = "")),
+                           p("Url:"),
+                           value = "http://labs.statsbiblioteket.dk/labsapi/api/aviser/export/fields?query=revolution%20AND%20py%3A%5B1840%20TO%201880%5D&fields=link&fields=recordID&fields=timestamp&fields=pwa&fields=cer&fields=fulltext_org&fields=pageUUID&fields=editionUUID&fields=titleUUID&fields=editionId&fields=familyId&fields=newspaper_page&fields=newspaper_edition&fields=lplace&fields=location_name&fields=location_coordinates&max=1&structure=header&structure=content&format=CSV",
+                           placeholder = "copy URL here")),
                mainPanel(
                  tableOutput('familyIdTable'),
                  tableOutput('lplaceTable'),
@@ -26,6 +27,7 @@ ui <- navbarPage(
 )
 
 server <- function(input, output) {
+  
   output$familyIdTable <- renderTable(
     read_csv(paste0(input$url)) %>% 
       count(familyId, sort = TRUE) %>% 
