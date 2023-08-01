@@ -2,26 +2,38 @@ library(shiny)
 library(tidyverse)
 library(wesanderson)
 library(urltools)
+library(shinyWidgets)
 
 
 
 
 # Define UI ----
-ui <- navbarPage(
+ui <- fluidPage(
+  setBackgroundColor(
+    color = "#b28906",
+    gradient = c("linear", "radial"),
+    direction = c("bottom", "top", "right", "left"),
+    shinydashboard = FALSE
+  ),
+
   titlePanel('Showcase of Mediestream API'),
   tabsetPanel(
     tabPanel("URL",
              sidebarLayout(
                sidebarPanel( 
-                 textInput("url", 
+                 tags$style(".well {background-color:#b98f07;}"),
+                 fluidRow(textInput("url", 
                            p("Url:"), 
-                           value = "")),
+                           value = "")
+                 ),
+                img(src='DKB_logo_expanded_black_small_RGB.png', align = "bottomleft", width = "50%")),
                mainPanel(
                  tableOutput('familyIdTable'),
                  tableOutput('lplaceTable'),
                  plotOutput("plot", click = "plot_click"),
                  verbatimTextOutput("info"),
-                 textOutput("result"))))
+                 textOutput("result"))),
+           )
   )
 )
 
@@ -49,7 +61,7 @@ server <- function(input, output) {
       labs(title = paste0('Amount of articles mentioning search term'), 
            subtitle = "dispersed on familyId from 1840 to 1880",
            x = "familyId")
-  }, res = 96) 
+  }, res = 96)
   
 }
 
