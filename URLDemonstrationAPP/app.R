@@ -3,8 +3,7 @@ library(tidyverse)
 library(wesanderson)
 library(urltools)
 
-
-
+revolutionValue = "http://labs.statsbiblioteket.dk/labsapi/api/aviser/export/fields?query=revolution%20AND%20py%3A%5B1840%20TO%201880%5D&fields=link&fields=recordID&fields=timestamp&fields=pwa&fields=cer&fields=fulltext_org&fields=pageUUID&fields=editionUUID&fields=titleUUID&fields=editionId&fields=familyId&fields=newspaper_page&fields=newspaper_edition&fields=lplace&fields=location_name&fields=location_coordinates&max=1&structure=header&structure=content&format=CSV"
 
 # Define UI ----
 ui <- navbarPage(
@@ -15,33 +14,37 @@ ui <- navbarPage(
                sidebarPanel( 
                  textInput("url", 
                            p("Url:"),
-                           value = "http://labs.statsbiblioteket.dk/labsapi/api/aviser/export/fields?query=revolution%20AND%20py%3A%5B1840%20TO%201880%5D&fields=link&fields=recordID&fields=timestamp&fields=pwa&fields=cer&fields=fulltext_org&fields=pageUUID&fields=editionUUID&fields=titleUUID&fields=editionId&fields=familyId&fields=newspaper_page&fields=newspaper_edition&fields=lplace&fields=location_name&fields=location_coordinates&max=1&structure=header&structure=content&format=CSV",
-                           placeholder = "copy URL here")),
+                           value = "",
+                           placeholder = "copy URL here"),
+                 actionButton("load", "Load")),
                mainPanel(
                  tableOutput('familyIdTable'),
                  tableOutput('lplaceTable'),
-                 plotOutput("plot", click = "plot_click"),
-                 verbatimTextOutput("info"),
-                 textOutput("result"))))
+                 plotOutput("plot", click = "plot_click")
+    )))
   )
 )
 
 server <- function(input, output) {
   
+  data <- eventReactive(input$load, {
+    data <- read_csv(paste0(input$url))
+  })
+  
   output$familyIdTable <- renderTable(
-    read_csv(paste0(input$url)) %>% 
+    data() %>% 
       count(familyId, sort = TRUE) %>% 
       top_n(10)
   )
   
   output$lplaceTable <- renderTable(
-    read_csv(paste0(input$url)) %>% 
+    data() %>% 
       count(lplace, sort = TRUE) %>% 
       top_n(10)
   )
   
   output$plot <- renderPlot({
-    read_csv(paste0(input$url)) %>% 
+    data() %>% 
       count(familyId, sort = TRUE) %>% 
       slice_max(n, n = 20) %>% 
       mutate(familyId = reorder(familyId, n)) %>% 
