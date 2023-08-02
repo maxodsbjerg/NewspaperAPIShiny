@@ -4,8 +4,7 @@ library(wesanderson)
 library(urltools)
 library(shinyWidgets)
 
-
-
+revolutionValue = "http://labs.statsbiblioteket.dk/labsapi/api/aviser/export/fields?query=revolution%20AND%20py%3A%5B1840%20TO%201880%5D&fields=link&fields=recordID&fields=timestamp&fields=pwa&fields=cer&fields=fulltext_org&fields=pageUUID&fields=editionUUID&fields=titleUUID&fields=editionId&fields=familyId&fields=newspaper_page&fields=newspaper_edition&fields=lplace&fields=location_name&fields=location_coordinates&max=1&structure=header&structure=content&format=CSV"
 
 # Define UI ----
 ui <- fluidPage(
@@ -24,7 +23,9 @@ ui <- fluidPage(
                  tags$style(".well {background-color:#b98f07;}"),
                  fluidRow(textInput("url", 
                            p("Url:"), 
-                           value = "")
+                           value = "", 
+                           placeholder = "copy URL here"),
+                           actionButton("load", "Load"),
                  ),
                 img(src='DKB_logo_expanded_black_small_RGB.png', align = "bottomleft", width = "50%")),
                mainPanel(
@@ -38,20 +39,25 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  
+  data <- eventReactive(input$load, {
+    data <- read_csv(paste0(input$url))
+  })
+  
   output$familyIdTable <- renderTable(
-    read_csv(paste0(input$url)) %>% 
+    data() %>% 
       count(familyId, sort = TRUE) %>% 
       top_n(10)
   )
   
   output$lplaceTable <- renderTable(
-    read_csv(paste0(input$url)) %>% 
+    data() %>% 
       count(lplace, sort = TRUE) %>% 
       top_n(10)
   )
   
   output$plot <- renderPlot({
-    read_csv(paste0(input$url)) %>% 
+    data() %>% 
       count(familyId, sort = TRUE) %>% 
       slice_max(n, n = 20) %>% 
       mutate(familyId = reorder(familyId, n)) %>% 
