@@ -1,0 +1,21 @@
+
+body {
+  background-color: #b28906;
+  color: white; /* text color */
+}
+
+/* Change header text to imported font */
+h2 {
+  font-family: 'Arial Bold', Helvetica, sans-serif;
+}
+
+/* Make text visible on inputs */
+.shiny-input-container {
+  color: #474747;
+}
+
+.shiny-output-error{
+    color: white;
+}
+
+
