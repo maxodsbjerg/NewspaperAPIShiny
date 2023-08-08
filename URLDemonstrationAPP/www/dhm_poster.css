@@ -1,7 +1,7 @@
 
 body {
   background-color: #b28906;
-  color: white; /* text color */
+  color: #FBFAF5; /* text color */
 }
 
 /* Change header text to imported font */
@@ -15,7 +15,7 @@ h2 {
 }
 
 .shiny-output-error{
-    color: white;
+    color: #FBFAF5;
 }
 
 
