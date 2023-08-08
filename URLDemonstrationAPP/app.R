@@ -61,7 +61,7 @@ server <- function(input, output) {
       slice_max(n, n = 20) %>% 
       mutate(familyId = reorder(familyId, n)) %>% 
       ggplot(aes(x = familyId, y = n))+ 
-      geom_col(fill = "white") +
+      geom_col(fill = "#FBFAF5") +
       coord_flip() +
       labs(title = paste0('Amount of articles matching search query "', input$url %>% str_remove("&fields=.*") %>% str_remove(".*query=") %>% url_decode(), '"'), 
            subtitle = "dispersed on familyId",
@@ -72,32 +72,32 @@ server <- function(input, output) {
         panel.grid.minor = element_blank(), #remove minor gridlines
         axis.title.x = element_text(size=10, 
                                           family = "Arial",
-                                          color="white", 
+                                          color="#FBFAF5", 
                                           face="bold",
                                           angle=0),
         axis.title.y = element_text(size=10, 
                                     family = "Arial",
-                                    color="white", 
+                                    color="#FBFAF5", 
                                     face="bold",
                                     angle=90),
         axis.text.x = element_text(size=8, 
                                     family = "Arial",
-                                    color="white", 
+                                    color="#FBFAF5", 
                                     face="bold",
                                     angle=0),
         axis.text.y = element_text(size=8, 
                                     family = "Arial",
-                                    color="white", 
+                                    color="#FBFAF5", 
                                     face="bold",
                                     angle=0),
         plot.title = element_text(size=14, 
                                     family = "Arial",
-                                    color="white", 
+                                    color="#FBFAF5", 
                                     face="bold",
                                     angle=0),
         plot.subtitle = element_text(size=14, 
                                   family = "Arial",
-                                  color="white", 
+                                  color="#FBFAF5", 
                                   face="bold",
                                   angle=0)
         )
