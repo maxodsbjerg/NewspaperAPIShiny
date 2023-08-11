@@ -108,6 +108,7 @@ server <- function(input, output) {
       unnest_tokens(word, fulltext_org) %>% 
       anti_join(stopord, by = "word") %>% 
       anti_join(stopord2, by = "word") %>% 
+      anti_join(stop_words, by = "word") %>% 
       count(word, sort = TRUE) %>% 
       slice_max(n, n = 20) %>% 
       ggplot(aes(label = word, size = n, color = n)) +
