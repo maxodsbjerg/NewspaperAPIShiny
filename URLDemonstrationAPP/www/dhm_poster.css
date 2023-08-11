@@ -45,3 +45,8 @@ h2 {
   border-bottom: 1px solid #FFFFF0;
   background: #FFFFF0;
 }
+.nav .nav-tabs,
+a {
+background-color: #c59906;
+border: 1px solid black;
+}

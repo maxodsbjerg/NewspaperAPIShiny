@@ -112,28 +112,7 @@ server <- function(input, output) {
     input$n_slider
   }) %>% debounce(1000)
   
-output$networkgraph <- renderPlot({
-  data() %>% 
-    unnest_tokens(bigram, fulltext_org, token = "ngrams", n = 2) %>% 
-    separate(bigram, c("word1", "word2"), sep = " ") %>% 
-    filter(!word1 %in% stopord$word) %>%
-    filter(!word2 %in% stopord$word) %>% 
-    count(word1, word2, sort = TRUE) -> bigrams_count
-  
-  bigram_graph <- bigrams_count %>%
-    filter(n > slider_input()) %>%
-    graph_from_data_frame()
-  
-  a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
-  
-  ggraph(bigram_graph, layout = "fr") +
-    geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
-                   arrow = a, end_cap = circle(.07, 'inches')) +
-    geom_node_point(color = "#FBFAF5", size = 3) +
-    geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
-    theme_void()
-  
-}, res = 96, bg="transparent")  
+
   output$wordcloud <- renderPlot({
     data() %>%
       unnest_tokens(word, fulltext_org) %>% 
@@ -160,7 +139,30 @@ output$networkgraph <- renderPlot({
                                          face="bold",
                                          angle=0))
   }, res = 96, bg="transparent")
-  
+  output$networkgraph <- renderPlot({
+    data() %>% 
+      unnest_tokens(bigram, fulltext_org, token = "ngrams", n = 2) %>% 
+      separate(bigram, c("word1", "word2"), sep = " ") %>% 
+      filter(!word1 %in% stopord$word) %>%
+      filter(!word2 %in% stopord$word) %>%
+      filter(!word1 %in% stop_words$word) %>%
+      filter(!word2 %in% stop_words$word) %>%
+      count(word1, word2, sort = TRUE) -> bigrams_count
+    
+    bigram_graph <- bigrams_count %>%
+      filter(n > slider_input()) %>%
+      graph_from_data_frame()
+    
+    a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+    
+    ggraph(bigram_graph, layout = "fr") +
+      geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
+                     arrow = a, end_cap = circle(.07, 'inches')) +
+      geom_node_point(color = "#FFFFF0", size = 3) +
+      geom_node_text(aes(label = name), vjust = 1, hjust = 1, color = "#FBFAF5") +
+      theme_void()
+    
+  }, res = 96, bg="transparent")  
 }
 
 # Run the app ----
