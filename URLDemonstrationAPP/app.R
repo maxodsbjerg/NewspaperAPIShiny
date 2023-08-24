@@ -3,6 +3,8 @@ library(tidyverse)
 library(wesanderson)
 library(urltools)
 library(shinyWidgets)
+library(ggraph)
+library(igraph)
 library(tidytext)
 library(ggwordcloud)
 
@@ -34,8 +36,11 @@ ui <- fluidPage(
                    column(width = 6,
                           plotOutput("wordcloud", click = "plot_click"), offset = 0)))
                ),
-           )
-  ),
+           ),
+    tabPanel("Ordnetværk",
+             sliderInput("n_slider", "Bagatelgrænse for antal ordforbindelser", min = 2, max = 20, value = 8), 
+             plotOutput("networkgraph", click = "plot_click")
+  )),
   img(src='DKB_logo_expanded_white_small_RGB.png', align = "bottomleft", width = "15%")
 )
 
@@ -43,7 +48,7 @@ server <- function(input, output) {
   stopord <- read_csv("https://gist.githubusercontent.com/maxodsbjerg/4d1e3b1081ebba53a8d2c3aae2a1a070/raw/e1f63b4c81c15bb58a54a2f94673c97d75fe6a74/stopord_18.csv")
   stopord2 <- tibble(word = c("os", "vore", "bleven", "stal", "vel", "vor", "mig", "sine", "gjore", "sit", "hos", "skal", "skulde", "thi", "lige", "anden", "gjort", "deel"))
   data <- eventReactive(input$load, {
-    data <- read_csv(paste0(input$url))
+  data <- read_csv(paste0(input$url))
   })
   
 
@@ -102,7 +107,12 @@ server <- function(input, output) {
                                   angle=0)
         )
   }, res = 96, bg="transparent")
+
+  slider_input <- reactive({
+    input$n_slider
+  }) %>% debounce(1000)
   
+
   output$wordcloud <- renderPlot({
     data() %>%
       unnest_tokens(word, fulltext_org) %>% 
@@ -129,7 +139,30 @@ server <- function(input, output) {
                                          face="bold",
                                          angle=0))
   }, res = 96, bg="transparent")
-  
+  output$networkgraph <- renderPlot({
+    data() %>% 
+      unnest_tokens(bigram, fulltext_org, token = "ngrams", n = 2) %>% 
+      separate(bigram, c("word1", "word2"), sep = " ") %>% 
+      filter(!word1 %in% stopord$word) %>%
+      filter(!word2 %in% stopord$word) %>%
+      filter(!word1 %in% stop_words$word) %>%
+      filter(!word2 %in% stop_words$word) %>%
+      count(word1, word2, sort = TRUE) -> bigrams_count
+    
+    bigram_graph <- bigrams_count %>%
+      filter(n > slider_input()) %>%
+      graph_from_data_frame()
+    
+    a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+    
+    ggraph(bigram_graph, layout = "fr") +
+      geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
+                     arrow = a, end_cap = circle(.07, 'inches')) +
+      geom_node_point(color = "#FFFFF0", size = 3) +
+      geom_node_text(aes(label = name), vjust = 1, hjust = 1, color = "#FBFAF5") +
+      theme_void()
+    
+  }, res = 96, bg="transparent")  
 }
 
 # Run the app ----

@@ -18,4 +18,35 @@ h2 {
     color: #FBFAF5;
 }
 
+.shiny-input-container #n_slider-label{
+  color: #FBFAF5;
+}
 
+.irs--shiny .irs-grid-text{
+  color: #FBFAF5;
+}
+
+.irs--shiny .irs-min, .irs--shiny .irs-max {
+  color: #FBFAF5;
+}
+
+.irs-grid-pol{
+  color: #FBFAF5;
+}
+
+.irs--shiny .irs-grid-pol{
+  background-color: #FBFAF5;
+}
+
+.irs--shiny .irs-bar {
+  top: 25px;
+  height: 8px;
+  border-top: 1px solid #FFFFF0;
+  border-bottom: 1px solid #FFFFF0;
+  background: #FFFFF0;
+}
+.nav .nav-tabs,
+a {
+background-color: #c59906;
+border: 1px solid black;
+}
