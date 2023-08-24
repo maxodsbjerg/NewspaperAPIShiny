@@ -7,7 +7,12 @@ The web app only needed input is a request url from the /aviser/export/fields-en
 
 Based on this request url with the raw data of the query the web app creates a column diagram of the dispersion of the results on newspaper, a table of publication place and a word cloud of the most frequent words in the articles (without stopwords(Danish + English) being counted). Lastly it also does network graph based on the most frequent word to word connections. 
 
+# Requirements
+. R
+
 # Running the web app
 If you're not familiar with cloning gituhb repositories can be ran from R with the following command: 
 
-```shiny::runGitHub('NewspaperAPIShiny', 'maxodsbjerg')```
+```
+shiny::runGitHub('NewspaperAPIShiny', 'maxodsbjerg')
+```
