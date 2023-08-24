@@ -11,7 +11,7 @@ Based on this request url with the raw data of the query the web app creates a c
 * R
 
 # Running the web app
-If you're not familiar with cloning gituhb repositories can be ran from R with the following command: 
+If you're not familiar with cloning github repositories, the app can be run from R with the following command: 
 
 ```
 install.packages(c("shiny", "tidyverse", "wesanderson", "urltools", "shinyWidgets", "ggraph", "igraph", "tidytext", "ggwordcloud"))
