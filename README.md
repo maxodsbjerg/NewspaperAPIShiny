@@ -14,7 +14,7 @@ Based on this request url with the raw data of the query the web app creates a c
 If you're not familiar with cloning gituhb repositories can be ran from R with the following command: 
 
 ```
-install.packages("shiny", "tidyverse", "wesanderson", "urltools", "shinyWidgets", "ggraph", "igraph", "tidytext", "ggwordcloud")
+install.packages(c("shiny", "tidyverse", "wesanderson", "urltools", "shinyWidgets", "ggraph", "igraph", "tidytext", "ggwordcloud"))
 shiny::runGitHub('NewspaperAPIShiny', 'maxodsbjerg', subdir = 'URLDemonstrationAPP/')
 ```
 
